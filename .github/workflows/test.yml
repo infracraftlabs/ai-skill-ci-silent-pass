@@ -1,0 +1,19 @@
+name: test
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash   # bash --noprofile --norc -eo pipefail {0}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: npm ci
+      - run: npm test
+      # The skill reviews its own workflow: no errors allowed.
+      - run: node ci-silent-pass-review/scripts/find-silent-passes.mjs .github/workflows/test.yml

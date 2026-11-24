@@ -1,0 +1,14 @@
+# The ten step variants from "Why nobody trusts green builds" (2026-11-18), one job each.
+name: variants
+on: pull_request
+jobs:
+  v01-plain:            {runs-on: ubuntu-latest, steps: [{run: ./run-tests.sh}]}
+  v02-pipe-default:     {runs-on: ubuntu-latest, steps: [{run: ./run-tests.sh | tee test.log}]}
+  v03-pipe-bash:        {runs-on: ubuntu-latest, steps: [{run: ./run-tests.sh | tee test.log, shell: bash}]}
+  v04-or-true:          {runs-on: ubuntu-latest, steps: [{run: ./run-tests.sh || true, shell: bash}]}
+  v05-retry:            {runs-on: ubuntu-latest, steps: [{run: "for i in 1 2 3; do ./flaky.sh && break; done", shell: bash}]}
+  v06-retry-last:       {runs-on: ubuntu-latest, steps: [{run: "for i in 1 2 3; do ./run-tests.sh && break; done", shell: bash}]}
+  v07-retry-then-line:  {runs-on: ubuntu-latest, steps: [{run: "for i in 1 2 3; do ./run-tests.sh && break; done\necho uploading report", shell: bash}]}
+  v08-and-list:         {runs-on: ubuntu-latest, steps: [{run: "./run-tests.sh && echo ok\necho next", shell: bash}]}
+  v09-own-line:         {runs-on: ubuntu-latest, steps: [{run: "./run-tests.sh\necho one\necho two", shell: bash}]}
+  v10-retry-ok-flag:    {runs-on: ubuntu-latest, steps: [{run: "ok=0\nfor i in 1 2 3; do ./run-tests.sh && { ok=1; break; }; done\n[ \"$ok\" = 1 ]\necho next", shell: bash}]}

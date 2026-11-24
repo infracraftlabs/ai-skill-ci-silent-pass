@@ -1,0 +1,13 @@
+name: ci
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test | tee test.log
+      - run: npm run lint || true
+      - run: npm run e2e
+        continue-on-error: true
+      - run: for i in 1 2 3; do npm run integration && break; done

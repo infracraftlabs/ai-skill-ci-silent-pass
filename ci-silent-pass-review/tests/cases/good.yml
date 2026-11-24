@@ -1,0 +1,21 @@
+name: ci
+on: pull_request
+defaults:
+  run:
+    shell: bash   # bash --noprofile --norc -eo pipefail {0}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test | tee test.log
+      - run: npm run lint
+      - run: npm run e2e
+  # Results you want to see but not enforce: separate job, NOT a required check.
+  e2e-nightly-report:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm run e2e:extended

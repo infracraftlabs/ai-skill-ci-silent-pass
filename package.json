@@ -1,0 +1,9 @@
+{
+  "name": "ai-skill-ci-silent-pass",
+  "private": true,
+  "type": "module",
+  "description": "An AI skill that finds GitHub Actions steps that can end green while a command failed.",
+  "license": "MIT",
+  "scripts": { "test": "bash ci-silent-pass-review/tests/run.sh" },
+  "dependencies": { "yaml": "2.9.1" }
+}
